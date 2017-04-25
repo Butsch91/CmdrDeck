@@ -32,7 +32,10 @@ function fcnOnEdit() {
   var ClrEnable = actSht.getRange(1,13).getValue();
   var StatusRow = 2;
   var StatusCol = 3;
+  var CardNameCol = 3;
   var CardTypeCol = 7;
+  var CategoryCol = 9;
+  var CardColorCol = 11;
   var CmdRow = 1;
   var CmdCol = 9;
   var GenDeckRow = 2;
@@ -57,11 +60,9 @@ function fcnOnEdit() {
       LinkRng.setValue('=HYPERLINK("http://gatherer.wizards.com/Pages/Card/Details.aspx?name='+CardName+'","'+CardName+'")');
     }
     
-    // IF THE CARD ADDED WAS A LAND, LAND CATEGORY AND LAND COLOR IS AUTOMATICALLY ADDED. IF ARTIFACT, COLORLESS IS AUTOMATICALLY ADDED
-    if (CellRow >= DeckFirstRow && CellCol == CardTypeCol && Value != ''){
+    // IF THE CARD TYPE MODIFIED IS A LAND, LAND CATEGORY AND LAND COLOR IS AUTOMATICALLY ADDED. IF ARTIFACT, COLORLESS IS AUTOMATICALLY ADDED
+    if (CellRow >= DeckFirstRow && CellCol == CardTypeCol && (Value == 'Land' || Value == 'Basic Land')){
       var CardType = Value;
-      var CategoryCol = 9;
-      var CardColorCol = 11;
       
       if (CardType == 'Land' || CardType == 'Basic Land'){
         actSht.getRange(CellRow,CategoryCol).setValue('Land');
@@ -71,6 +72,14 @@ function fcnOnEdit() {
       if (CardType == "Artifact"){
         actSht.getRange(CellRow,CardColorCol).setValue('C');
       }
+    }
+    
+    // IF THE CARD ADDED WAS A BASIC LAND, LAND CATEGORY AND LAND COLOR IS AUTOMATICALLY ADDED.
+    if (CellRow >= DeckFirstRow && CellCol == CardNameCol && (Value == 'Plains' || Value == 'Island' || Value == 'Swamp' || Value == 'Mountain' || Value == 'Forest' || Value == 'Wastes')){
+
+      actSht.getRange(CellRow,CardTypeCol).setValue('Basic Land');
+      actSht.getRange(CellRow,CategoryCol).setValue('Land');
+      actSht.getRange(CellRow,CardColorCol).setValue('L');
     }
     
     // IF CARD NAME WAS CLEARED, DELETES ALL INFO IF CLEAR IS ENABLED  
