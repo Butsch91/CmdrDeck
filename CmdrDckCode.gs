@@ -18,12 +18,15 @@ function fcnGathererLink() {
   var CardCol = 3;
   var CardName;
   var CardRng;
-  var LinkCol = 14;
   var LinkRng;
   
   // Gets the Deck and Sideboard Ranges
   var ConfigSht = ss.getSheetByName('Config');
-  var DeckFirstRow = ConfigSht.getRange(4,8).getValue();
+  var DeckFirstRow = ConfigSht.getRange(4,8).getValue();  
+  var cfgRowCol = ConfigSht.getRange(18, 8, 17, 1).getValues();
+  
+  // Parameters
+  var LinkCol =       cfgRowCol[ 0][0];
  
   if(actShtName != 'Template'  && actShtName != 'Config' && actShtName != 'Conversion' && actShtName != 'Test' && actShtName != 'Staple CrossRef') { 
     for (Row = DeckFirstRow - 1; Row <= MaxRow; Row++){
@@ -142,110 +145,188 @@ function fcnUpdateDeckStatus(Status) {
   var actSht = ss.getActiveSheet();								
   var actShtName = actSht.getSheetName();
   var MaxCol = actSht.getMaxColumns();
+  var rngStatus = actSht.getRange(2,1,1,3);
   var BackColor;
   var FontColor;
+  var IgnoreDeck = 0;
     
   // Opens the Configuration Sheet and Gets the Deck and Sideboard Ranges
-  var ConfigSht = ss.getSheetByName('Config');
+  var shtConfig = ss.getSheetByName('Config');
+  var StatusVal = shtConfig.getRange('F6:F15').getValues();
+  var StatusBck = shtConfig.getRange('F6:F15').getBackgrounds();
+  var StatusFnt = shtConfig.getRange('F6:F15').getFontColors();
   
-  // Selects the Tab Color
-  if (Status == 'Ready to Play'){
-    BackColor = ConfigSht.getRange(7, 6).getBackground();
-    FontColor = ConfigSht.getRange(7, 6).getFontColor();
-  } 
+  // Compares the Deck Status to the Status List 
+  switch (Status){
   
-  if (Status == 'Recheck Deck and List'){
-    BackColor = ConfigSht.getRange(8, 6).getBackground();
-    FontColor = ConfigSht.getRange(8, 6).getFontColor();
-  } 
-  
-  if (Status == 'Update List'){
-    BackColor = ConfigSht.getRange(9, 6).getBackground();
-    FontColor = ConfigSht.getRange(9, 6).getFontColor();
-  } 
-  
-  if (Status == 'Update Deck'){
-    BackColor = ConfigSht.getRange(10, 6).getBackground();
-    FontColor = ConfigSht.getRange(10, 6).getFontColor();
-  } 
-  
-  if (Status == 'Update Everything'){
-    BackColor = ConfigSht.getRange(11, 6).getBackground();
-    FontColor = ConfigSht.getRange(11, 6).getFontColor();
+    case StatusVal[1][0] : {
+      BackColor = StatusBck[1][0];
+      FontColor = StatusFnt[1][0];
+      break;
+    }
+    case StatusVal[2][0] : {
+      BackColor = StatusBck[2][0];
+      FontColor = StatusFnt[2][0];
+      break;
+    }
+    case StatusVal[3][0] : {
+      BackColor = StatusBck[3][0];
+      FontColor = StatusFnt[3][0];
+      break;
+    }
+    case StatusVal[4][0] : {
+      BackColor = StatusBck[4][0];
+      FontColor = StatusFnt[4][0];
+      break;
+    }
+    case StatusVal[5][0] : {
+      BackColor = StatusBck[5][0];
+      FontColor = StatusFnt[5][0];
+      break;
+    }
+    case StatusVal[6][0] : {
+      BackColor = StatusBck[6][0];
+      FontColor = StatusFnt[6][0];
+      break;
+    }
+    case StatusVal[7][0] : {
+      BackColor = StatusBck[7][0];
+      FontColor = StatusFnt[7][0];
+      break;
+    }
+    case StatusVal[8][0] : {
+      BackColor = StatusBck[8][0];
+      FontColor = StatusFnt[8][0];
+      break;
+    }
+    case StatusVal[9][0] : {
+      BackColor = StatusBck[9][0];
+      FontColor = StatusFnt[9][0];
+      break;
+    }
   }
-  
-  if (Status == 'In Construction'){
-    BackColor = ConfigSht.getRange(14, 6).getBackground();
-    FontColor = ConfigSht.getRange(14, 6).getFontColor();
-  }   
-  
-  if (Status == 'Not Listed'){
-    BackColor = ConfigSht.getRange(15, 6).getBackground();
-    FontColor = ConfigSht.getRange(15, 6).getFontColor();
-  } 
   
   // Sets the Status and Tab Color according to the Status Value
   if (Status != ''){
-    actSht.getRange(2,1,1,3).setBackground(BackColor);
-    actSht.getRange(2,1,1,3).setFontColor(FontColor);
+    rngStatus.setBackground(BackColor);
+    rngStatus.setFontColor(FontColor);
     actSht.setTabColor(BackColor);
   }
     
   // Sets the Status and Tab Color according to the Status Value
   if (Status == ''){
     BackColor = null;
-    actSht.getRange(2,1,1,3).setBackground('#cfe2f3');
-    actSht.getRange(2,1,1,3).setFontColor('black');
+    rngStatus.setBackground('#cfe2f3');
+    rngStatus.setFontColor('black');
+    actSht.setTabColor(BackColor);
+  }  
+}
+
+// **********************************************
+// function fcnUpdateStapleStatus()
+//
+// 
+// 
+// **********************************************
+function fcnUpdateStapleStatus(Status) {
+  
+  // Gets Sheet Data
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var actSht = ss.getActiveSheet();								
+  var actShtName = actSht.getSheetName();
+  var MaxCol = actSht.getMaxColumns();
+  var rngStatus = actSht.getRange(2,4);
+  var BackColor;
+  var FontColor;
+  var IgnoreDeck = 0;
+    
+  // Opens the Configuration Sheet and Gets the Deck and Sideboard Ranges
+  var shtConfig = ss.getSheetByName('Config');
+  var StatusVal = shtConfig.getRange('F16:F25').getValues();
+  var StatusBck = shtConfig.getRange('F16:F25').getBackgrounds();
+  var StatusFnt = shtConfig.getRange('F16:F25').getFontColors();
+  
+  // Compares the Deck Status to the Status List 
+  switch (Status){
+  
+    case StatusVal[1][0] : {
+      BackColor = StatusBck[1][0];
+      FontColor = StatusFnt[1][0];
+      break;
+    }
+    case StatusVal[2][0] : {
+      BackColor = StatusBck[2][0];
+      FontColor = StatusFnt[2][0];
+      break;
+    }
+    case StatusVal[3][0] : {
+      BackColor = StatusBck[3][0];
+      FontColor = StatusFnt[3][0];
+      break;
+    }
+    case StatusVal[4][0] : {
+      BackColor = StatusBck[4][0];
+      FontColor = StatusFnt[4][0];
+      break;
+    }
+    case StatusVal[5][0] : {
+      BackColor = StatusBck[5][0];
+      FontColor = StatusFnt[5][0];
+      break;
+    }
+    case StatusVal[6][0] : {
+      BackColor = StatusBck[6][0];
+      FontColor = StatusFnt[6][0];
+      break;
+    }
+    case StatusVal[7][0] : {
+      BackColor = StatusBck[7][0];
+      FontColor = StatusFnt[7][0];
+      break;
+    }
+    case StatusVal[8][0] : {
+      BackColor = StatusBck[8][0];
+      FontColor = StatusFnt[8][0];
+      break;
+    }
+    case StatusVal[9][0] : {
+      BackColor = StatusBck[9][0];
+      FontColor = StatusFnt[9][0];
+      break;
+    }
+  }
+  
+  // Sets the Status and Tab Color according to the Status Value
+  if (Status != ''){
+    rngStatus.setBackground(BackColor);
+    rngStatus.setFontColor(FontColor);
+//    actSht.setTabColor(BackColor);
+  }
+    
+  // Sets the Status and Tab Color according to the Status Value
+  if (Status == ''){
+    BackColor = null;
+    rngStatus.setBackground('#cfe2f3');
+    rngStatus.setFontColor('black');
     actSht.setTabColor(BackColor);
   }  
   
   // Gets the Deck Name
   var DeckName = actSht.getRange(1, 1).getValue();
-  
+  // Get List of Decks to Ignore for Commander Staple Binder
+  var IgnoreDeckList = shtConfig.getRange('E23:E32').getValues();
+  // Look for Deck to Ignore
+  for(var i = 0; i< IgnoreDeckList.length; i++){
+    if(DeckName == IgnoreDeckList[i][0]) IgnoreDeck = 1;
+  }
+
   // Opens Spreadsheet _Cmdr Staple Binder to update the Deck Tab Color
-  if (DeckName != 'Silvos' && DeckName != 'Ob Nixilis'){ 
+  if (IgnoreDeck == 0){ 
     var ssStaple = SpreadsheetApp.openById('1l44UmxpachzK7SHETkOX1qkOk56uNUoyvOjzb9BrhgQ');
     var StapleDeckSht = ssStaple.getSheetByName(DeckName);
     StapleDeckSht.setTabColor(BackColor);
   }
 }
-
-
-// **********************************************
-// function fcnSortCardsCmd()
-//
-// When the sort command cell is modified,
-// the function sorts cards according to the choice 
-// 
-// **********************************************
-
-function fcnSortCardsCmd(SortCmd) {
-  
-  if (SortCmd == 'Type / Card'){
-    fcnSortDeckTypeName();
-  }
-  
-  if (SortCmd == 'Type / Color'){
-    fcnSortDeckTypeColor();
-  }
-  
-  if (SortCmd == 'Color'){
-    fcnSortDeckColor();
-  }
-  
-  if (SortCmd == 'Category'){
-    fcnSortDeckCategory();
-  }
-  
-  if (SortCmd == 'Card Name'){
-    fcnSortDeckCardName();
-  }
-  
-  if (SortCmd == 'Staple'){
-    fcnSortDeckStaple();
-  }
-}
-
 
 
 // **********************************************
