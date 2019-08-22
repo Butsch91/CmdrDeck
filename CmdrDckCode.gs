@@ -23,15 +23,15 @@ function fcnGathererLink() {
   // Gets the Deck and Sideboard Ranges
   var ConfigSht = ss.getSheetByName('Config');
   var DeckFirstRow = ConfigSht.getRange(4,8).getValue();  
-  var cfgRowCol = ConfigSht.getRange(18, 8, 17, 1).getValues();
+  var cfgRowCol = ConfigSht.getRange(17, 8, 25, 1).getValues();
   
   // Parameters
-  var LinkCol =       cfgRowCol[ 0][0];
+  var colLink = cfgRowCol[12][0];
  
   if(actShtName != 'Template'  && actShtName != 'Config' && actShtName != 'Conversion' && actShtName != 'Test' && actShtName != 'Staple CrossRef') { 
     for (Row = DeckFirstRow - 1; Row <= MaxRow; Row++){
       CardRng = actSht.getRange(Row, CardCol);
-      LinkRng = actSht.getRange(Row, LinkCol);
+      LinkRng = actSht.getRange(Row, colLink);
       CardName = CardRng.getValue();
       if(CardName != '') LinkRng.setValue('=HYPERLINK("http://gatherer.wizards.com/Pages/Card/Details.aspx?name='+CardName+'","'+CardName+'")');
       LinkRng.setFontLine('none');
@@ -58,7 +58,7 @@ function fcnClearGathererLink() {
   var CardCol = 3;
   var CardName;
   var CardRng;
-  var LinkCol = 14;
+  var colLink = 14;
   var LinkRng;
 
   // Gets the Deck and Sideboard Ranges
@@ -68,7 +68,7 @@ function fcnClearGathererLink() {
   if(actShtName != 'Template' && actShtName != 'Config' && actShtName != 'Conversion' && actShtName != 'Test' && actShtName != 'Staple CrossRef') { 
     for (Row = DeckFirstRow - 1; Row <= MaxRow; Row++){
       CardRng = actSht.getRange(Row, CardCol);
-      LinkRng = actSht.getRange(Row, LinkCol);
+      LinkRng = actSht.getRange(Row, colLink);
       CardName = CardRng.getValue();
       if(CardName != '') LinkRng.clear();
     }

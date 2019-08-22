@@ -25,9 +25,9 @@ function OnOpen() {
   
   var SortMenuButtons = [{name: "Sort Deck by Staple", functionName: "fcnSortDeckStaple"},
                          {name: "Sort Deck by Type/Card Name", functionName: "fcnSortDeckTypeName"},
-                         {name: "Sort Deck by Type/Color", functionName: "fcnSortDeckTypeColor"}, 
+                         {name: "Sort Deck by Type/Color", functionName: "fcnSortDeckTypeColor"},
+                         {name: "Sort Deck by Card Name", functionName: "fcnSortDeckCardName"},  
                          {name: "Sort Deck by Color", functionName: "fcnSortDeckColor"}, 
-                         {name: "Sort Deck by Card Name", functionName: "fcnSortDeckCardName"}, 
                          {name: "Sort Deck by Category", functionName: "fcnSortDeckCategory"}, 
                          {name: "Sort Deck by Notes", functionName: "fcnSortDeckNotes"}];
   

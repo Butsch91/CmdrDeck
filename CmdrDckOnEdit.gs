@@ -28,25 +28,32 @@ function fcnOnEdit() {
   var ConfigSht = ss.getSheetByName('Config');
   var DeckFirstRow = ConfigSht.getRange(4,8).getValue();
   var SdBdFirstRow = ConfigSht.getRange(6,8).getValue();
-  var cfgRowCol = ConfigSht.getRange(18, 8, 17, 1).getValues();
+  var cfgRowCol = ConfigSht.getRange(17, 8, 26, 1).getValues();
   
   // Parameters
-  var LinkCol =       cfgRowCol[ 0][0];
-  var DeckStatusRow = cfgRowCol[ 1][0];
-  var DeckStatusCol = cfgRowCol[ 2][0];
-  var StplStatusRow = cfgRowCol[ 3][0];
-  var StplStatusCol = cfgRowCol[ 4][0];
-  var CardNameCol =   cfgRowCol[ 5][0];
-  var CardTypeCol =   cfgRowCol[ 6][0];
-  var CategoryCol =   cfgRowCol[ 7][0];
-  var CardColorCol =  cfgRowCol[ 8][0];
-  var NoteCol =       cfgRowCol[ 9][0];
-  var CmdRow =        cfgRowCol[10][0];
-  var CmdCol =        cfgRowCol[11][0];
-  var GenDeckRow =    cfgRowCol[12][0];
-  var GenDeckCol =    cfgRowCol[13][0];
-  var SetCol =        cfgRowCol[14][0];
-  var LinkRng = actSht.getRange(CellRow, LinkCol);
+  var colNb 	   = cfgRowCol[ 1][0];
+  var colName      = cfgRowCol[ 2][0];
+  var colSet 	   = cfgRowCol[ 3][0];
+  var colStaple    = cfgRowCol[ 4][0];
+  var colTypeSort  = cfgRowCol[ 5][0];
+  var colType 	   = cfgRowCol[ 6][0];
+  var colCatSort   = cfgRowCol[ 7][0];
+  var colCat       = cfgRowCol[ 8][0];
+  var colColorSort = cfgRowCol[ 9][0];
+  var colColor     = cfgRowCol[10][0];
+  var colNote      = cfgRowCol[11][0];
+  var colLink      = cfgRowCol[12][0];
+  
+  var rowDeckStatus = cfgRowCol[18][0];
+  var colDeckStatus = cfgRowCol[19][0];
+  var rowStplStatus = cfgRowCol[20][0];
+  var colStplStatus = cfgRowCol[21][0];
+  var rowCmd 		= cfgRowCol[22][0];
+  var colCmd 		= cfgRowCol[23][0];
+  var rowGenDeck 	= cfgRowCol[24][0];
+  var colGenDeck 	= cfgRowCol[25][0];
+  
+  var LinkRng = actSht.getRange(CellRow, colLink);
   var ClrEnable = actSht.getRange(2,13).getValue();
   
   Logger.log(ClrEnable);  
@@ -56,12 +63,12 @@ function fcnOnEdit() {
   if(actShtName != 'Template' &&  actShtName != 'Config' && actShtName != 'Conversion' && actShtName != 'Test' && actShtName != 'Staple CrossRef'){
     
     // IF THE MODIFIED CELL IS THE SORT COMMAND CELL, EXECUTES SORT CARDS FUNCTION
-    if (CellRow == CmdRow && CellCol == CmdCol && Value != ''){
+    if (CellRow == rowCmd && CellCol == colCmd && Value != ''){
       fcnSortCardsCmd(Value);
     }
     
     // IF THE MODIFIED CELL IS THE GENERATE NEW DECK VERSION COMMAND CELL, EXECUTES THE GENERATE NEW DECK VERSION FUNCTION
-    if (CellRow == GenDeckRow && CellCol == GenDeckCol && Value == 'Generate New Deck'){
+    if (CellRow == rowGenDeck && CellCol == colGenDeck && Value == 'Generate New Deck'){
       fcnGenerateNewVersion();
     }
     
@@ -77,29 +84,29 @@ function fcnOnEdit() {
     }
     
     // IF THE CARD TYPE MODIFIED IS A LAND, LAND CATEGORY AND LAND COLOR IS AUTOMATICALLY ADDED. IF ARTIFACT, COLORLESS IS AUTOMATICALLY ADDED
-    if (CellRow >= DeckFirstRow && CellCol == CardTypeCol && (Value == 'Land' || Value == 'Basic Land')){
+    if (CellRow >= DeckFirstRow && CellCol == colType && (Value == 'Land' || Value == 'Basic Land')){
       var CardType = Value;
       
       if (CardType == 'Land' || CardType == 'Basic Land'){
-        actSht.getRange(CellRow,CategoryCol).setValue('Land');
-        actSht.getRange(CellRow,CardColorCol).setValue('L');
+        actSht.getRange(CellRow,colCat).setValue('Land');
+        actSht.getRange(CellRow,colColor).setValue('L');
       }
       
       if (CardType == "Artifact"){
-        actSht.getRange(CellRow,CardColorCol).setValue('C');
+        actSht.getRange(CellRow,colColor).setValue('C');
       }
     }
     
     // IF THE CARD ADDED WAS A BASIC LAND, LAND CATEGORY AND LAND COLOR IS AUTOMATICALLY ADDED.
-    if (CellRow >= DeckFirstRow && CellCol == CardNameCol && (Value == 'Plains' || Value == 'Island' || Value == 'Swamp' || Value == 'Mountain' || Value == 'Forest' || Value == 'Wastes')){
+    if (CellRow >= DeckFirstRow && CellCol == colName && (Value == 'Plains' || Value == 'Island' || Value == 'Swamp' || Value == 'Mountain' || Value == 'Forest' || Value == 'Wastes')){
 
-      actSht.getRange(CellRow,CardTypeCol).setValue('Basic Land');
-      actSht.getRange(CellRow,CategoryCol).setValue('Land');
-      actSht.getRange(CellRow,CardColorCol).setValue('L');
+      actSht.getRange(CellRow,colType).setValue('Basic Land');
+      actSht.getRange(CellRow,colCat).setValue('Land');
+      actSht.getRange(CellRow,colColor).setValue('L');
     }
     
     // IF A NOTE CELL IS EDITED AND IT CONTAINS CERTAIN WORDS, HIGHLIGHT THE LINE 
-    if (CellRow >= DeckFirstRow && CellCol == NoteCol){
+    if (CellRow >= DeckFirstRow && CellCol == colNote){
       
       var NoteKeywordPresent = 0;
       
@@ -162,27 +169,27 @@ function fcnOnEdit() {
     // IF CARD NAME WAS CLEARED, DELETES ALL INFO IF CLEAR IS ENABLED  
     if (CellRow >= DeckFirstRow && CellCol == 3 && Value == '' && ClrEnable == 'Enable Clear') { 
       if(CellRow < SdBdFirstRow) actSht.getRange(CellRow,2).setValue("");
-      actSht.getRange(CellRow,StplStatusCol).setValue("");
-      actSht.getRange(CellRow,SetCol).setValue("");
-      actSht.getRange(CellRow,CardTypeCol).setValue("");
-      actSht.getRange(CellRow,CategoryCol).setValue("");
-      actSht.getRange(CellRow,CardColorCol).setValue("");
-      actSht.getRange(CellRow,NoteCol).setValue("");
-      actSht.getRange(CellRow,LinkCol).setValue("");
+      actSht.getRange(CellRow,colStplStatus).setValue("");
+      actSht.getRange(CellRow,colSet).setValue("");
+      actSht.getRange(CellRow,colType).setValue("");
+      actSht.getRange(CellRow,colCat).setValue("");
+      actSht.getRange(CellRow,colColor).setValue("");
+      actSht.getRange(CellRow,colNote).setValue("");
+      actSht.getRange(CellRow,colLink).setValue("");
       actSht.getRange(CellRow, 1, 1, MaxCol).setBackground(null);
       
       // Executes the Sort Command
-      var SortCmd = actSht.getRange(CmdRow, CmdCol).getValue();
+      var SortCmd = actSht.getRange(rowCmd, colCmd).getValue();
       fcnSortCardsCmd(SortCmd);
     }
     
     // IF DECK STATUS IS UPDATED, SETS STATUS AND TAB COLOR ACCORDING TO STATUS 
-    if (CellRow == DeckStatusRow && CellCol == DeckStatusCol){
+    if (CellRow == rowDeckStatus && CellCol == colDeckStatus){
       fcnUpdateDeckStatus(Value);
     }
     
     // IF STAPLE STATUS IS UPDATED, SETS STATUS AND TAB COLOR ACCORDING TO STATUS 
-    if (CellRow == StplStatusRow && CellCol == StplStatusCol){
+    if (CellRow == rowStplStatus && CellCol == colStplStatus){
       fcnUpdateStapleStatus(Value);
     }
   }
